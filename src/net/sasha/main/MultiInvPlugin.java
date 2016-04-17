@@ -34,7 +34,7 @@ public class MultiInvPlugin extends JavaPlugin{
     getServer().getPluginManager().registerEvents(new EventListener(this), this);
     
     /* Short time for testing ! */
-    invManager.runTaskTimerAsynchronously(this, 0L,2L);
+    invManager.runTaskTimer(this, 0L,2L);
     super.onEnable();
   }
   
@@ -46,6 +46,7 @@ public class MultiInvPlugin extends JavaPlugin{
     return fileSystem;
   }
   
+  /* In this version ALL files are loaded into memory */
   @SuppressWarnings("unchecked")
   private void loadPlayerInventories() {
     Map<UUID, PlayerInvFile> playerInvData = fileSystem.getPlayerData();
