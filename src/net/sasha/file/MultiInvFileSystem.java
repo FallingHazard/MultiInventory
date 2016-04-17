@@ -88,11 +88,9 @@ public class MultiInvFileSystem {
     }
   }
   
-  public void savePlayeInvFile(UUID playerUID) {
-    PlayerInvFile invFile = playerFileConfigMap.get(playerUID);
-    
-    if(invFile != null) {
-      invFile.saveFile();
+  public void saveAllPlayerFiles() {
+    for(PlayerInvFile playerInvFile : playerFileConfigMap.values()) {
+      playerInvFile.saveFile();
     }
   }
   

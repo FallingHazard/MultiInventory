@@ -41,44 +41,45 @@ public class InventoryManager extends BukkitRunnable{
     return playerWorldInvTable.get(playersUID, worldUID);
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public void run() {
-    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-      
-      @Override
-      public void run() {
-        plugin.getServer().broadcastMessage(ChatColor.RED
-                                             + (ChatColor.BOLD 
-                                             + "Saving Inventory Data..."));
-      }
-    }, 0L);
-    
+      plugin.getServer().broadcastMessage(ChatColor.RED
+                                           + (ChatColor.BOLD 
+                                           + "Saving Inventory Data..."));
     saveInventories();
   }
 
+  @SuppressWarnings("deprecation")
   private void saveInventories() {
     MultiInvFileSystem fileSystem = plugin.getFileSystem();
     
-    synchronized (playerWorldInvTable) {
-      for(Entry<UUID, Map<UUID, MultiInventory>> playerWorldInvEntry 
-          : playerWorldInvTable.rowMap().entrySet()) {
+    for(Entry<UUID, Map<UUID, MultiInventory>> playerWorldInvEntry 
+        : playerWorldInvTable.rowMap().entrySet()) {
+      
+      UUID playerUUID = playerWorldInvEntry.getKey();
+      FileConfiguration playerConfig = fileSystem.getPlayerFileConfig(playerUUID);
+      
+      Map<UUID, MultiInventory> worldInvMap = playerWorldInvEntry.getValue();
+      
+      for(Entry<UUID, MultiInventory> worldInvEntry : worldInvMap.entrySet()) {
+        UUID worldUID = worldInvEntry.getKey();
+        MultiInventory armorAndContents = worldInvEntry.getValue();
         
-        UUID playerUUID = playerWorldInvEntry.getKey();
-        FileConfiguration playerConfig = fileSystem.getPlayerFileConfig(playerUUID);
-        
-        Map<UUID, MultiInventory> worldInvMap = playerWorldInvEntry.getValue();
-        
-        for(Entry<UUID, MultiInventory> worldInvEntry : worldInvMap.entrySet()) {
-          UUID worldUID = worldInvEntry.getKey();
-          MultiInventory armorAndContents = worldInvEntry.getValue();
-          
-          playerConfig.set(worldUID.toString()+".contents", armorAndContents.getContent());
-          playerConfig.set(worldUID.toString()+".armor", armorAndContents.getArmor());
-        }
-        
-        fileSystem.savePlayeInvFile(playerUUID);
+        playerConfig.set(worldUID.toString()+".contents", armorAndContents.getContent());
+        playerConfig.set(worldUID.toString()+".armor", armorAndContents.getArmor());
       }
     }
+    
+    if(plugin.isEnabled())
+      plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin,
+                                                                 new Runnable() {
+      
+        @Override
+        public void run() {
+          fileSystem.saveAllPlayerFiles();
+        }
+      }, 1L);
   }
 
   public void saveAllInvsToFile() {

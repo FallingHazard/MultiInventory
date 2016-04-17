@@ -16,12 +16,15 @@ public class PlayerInvFile {
   }
   
   public void saveFile() {
-    try {
-      playerConfig.save(playerFile);
-    } catch (IOException e) {
-      e.printStackTrace();
+    synchronized (playerConfig) {
+      try {
+        playerConfig.save(playerFile);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
+    
 
   public FileConfiguration getConfig() {
     return playerConfig;

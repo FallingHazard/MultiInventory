@@ -20,6 +20,7 @@ public class MultiInvPlugin extends JavaPlugin{
     getServer().getScheduler().cancelTasks(this);
     
     invManager.saveAllInvsToFile();
+    fileSystem.saveAllPlayerFiles();
     super.onDisable();
   }
 
@@ -33,7 +34,7 @@ public class MultiInvPlugin extends JavaPlugin{
     getServer().getPluginManager().registerEvents(new EventListener(this), this);
     
     /* Short time for testing ! */
-    invManager.runTaskTimerAsynchronously(this, 0L,200L);
+    invManager.runTaskTimerAsynchronously(this, 0L,2L);
     super.onEnable();
   }
   
