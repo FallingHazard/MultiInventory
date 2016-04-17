@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,12 +40,11 @@ public class InventoryManager extends BukkitRunnable{
     return playerWorldInvTable.get(playersUID, worldUID);
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public void run() {
-      plugin.getServer().broadcastMessage(ChatColor.RED
+      /*plugin.getServer().broadcastMessage(ChatColor.RED
                                            + (ChatColor.BOLD 
-                                           + "Saving Inventory Data..."));
+                                           + "Saving Inventory Data..."));*/
     saveInventories();
   }
 
@@ -74,12 +72,11 @@ public class InventoryManager extends BukkitRunnable{
     if(plugin.isEnabled())
       plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin,
                                                                  new Runnable() {
-      
         @Override
         public void run() {
           fileSystem.saveAllPlayerFiles();
         }
-      }, 1L);
+      }, 100L);
   }
 
   public void saveAllInvsToFile() {

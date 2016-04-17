@@ -25,7 +25,6 @@ public class PlayerInvFile {
     }
   }
     
-
   public FileConfiguration getConfig() {
     return playerConfig;
   }

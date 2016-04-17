@@ -6,9 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public class EventListener implements Listener {
@@ -19,7 +21,7 @@ public class EventListener implements Listener {
   }
 
   /* This method is probably not necessary */
-  @EventHandler
+  @EventHandler(priority=EventPriority.MONITOR)
   public void onLeave(PlayerQuitEvent event) {
     InventoryManager invManager = plugin.getInvManager();
     
@@ -31,7 +33,8 @@ public class EventListener implements Listener {
     invManager.savePlayersWorldInv(playerUID, worldUID, quitter.getInventory());
   }
   
-  /* This runs on the assumption that every world change
+  /* 
+   * This runs on the assumption that every world change
    * results in some sort of teleport event, hopefully...
    */
   @EventHandler(priority=EventPriority.MONITOR)
@@ -47,21 +50,52 @@ public class EventListener implements Listener {
         
         Player teleporter = event.getPlayer();
         UUID teleportersUID = teleporter.getUniqueId();
+        PlayerInventory teleporterInv = teleporter.getInventory();
         
         invManager.savePlayersWorldInv(teleportersUID, 
-                                       prevWorldUID, teleporter.getInventory());
+                                       prevWorldUID, teleporterInv);
         
-        PlayerInventory teleporterInv = teleporter.getInventory();
         MultiInventory newInvStuff = invManager.getPlayersWorldInv(teleportersUID, 
-                                                                     newWorldUID);
+                                                                   newWorldUID);
        
         teleporterInv.clear();
+        teleporterInv.setArmorContents(new ItemStack[4]);
         
         if(newInvStuff != null) {
-          teleporterInv.setContents(newInvStuff.getContent().clone());
-          teleporterInv.setArmorContents(newInvStuff.getArmor().clone());
+          teleporterInv.setContents(newInvStuff.getContent());
+          teleporterInv.setArmorContents(newInvStuff.getArmor());
         }
       }
     }
   }
+  
+  @EventHandler(priority=EventPriority.MONITOR)
+  public void onDeath(PlayerDeathEvent event) {
+    Player dier = event.getEntity();
+
+    UUID worldUID = dier.getLocation().getWorld().getUID();
+    UUID dierUID = dier.getUniqueId();
+    
+    InventoryManager invManager = plugin.getInvManager();
+    invManager.savePlayersWorldInv(dierUID, worldUID, 
+                                   new MultiInventory(new ItemStack[4], 
+                                                      new ItemStack[36])); 
+  }
+  
+  @EventHandler(priority=EventPriority.MONITOR)
+  public void onRespawn(PlayerRespawnEvent event) {
+    Player respawner = event.getPlayer();
+    
+    UUID respawnerUID = respawner.getUniqueId();
+    UUID worldUID = event.getRespawnLocation().getWorld().getUID();
+    
+    InventoryManager invManager = plugin.getInvManager();
+    
+    MultiInventory newRespawnerInv = invManager.getPlayersWorldInv(respawnerUID,
+                                                                   worldUID);
+    
+    respawner.getInventory().setArmorContents(newRespawnerInv.getArmor());
+    respawner.getInventory().setContents(newRespawnerInv.getContent());
+  }
+  
 }

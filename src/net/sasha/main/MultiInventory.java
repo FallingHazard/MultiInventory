@@ -18,4 +18,5 @@ public class MultiInventory {
   public ItemStack[] getContent() {
     return content;
   }
+  
 }
