@@ -2,10 +2,9 @@ package net.sasha.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class SyncConfigWrapper {
@@ -24,7 +23,7 @@ public class SyncConfigWrapper {
   public synchronized Set<String> getConfigSectionKeys(String path) {
     Set<String> keys =  fileConfig.getConfigurationSection(path).getKeys(false);
 
-    return new TreeSet<String>(keys);
+    return new LinkedHashSet<String>(keys);
   }
 
   public synchronized void set(String path, Object value) {

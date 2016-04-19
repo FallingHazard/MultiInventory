@@ -4,8 +4,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -30,7 +29,7 @@ public class InventoryManager extends BukkitRunnable{
     savePlayersWorldInv(playerUUID, 
                         worldUID, 
                         new MultiInventory(inventory.getArmorContents().clone(), 
-                                           inventory.getContents().clone()));
+                                           inventory.getContents()));
   }
   
   public void savePlayersWorldInv(UUID playersUUID, 
@@ -39,7 +38,14 @@ public class InventoryManager extends BukkitRunnable{
   }
 
   public MultiInventory getPlayersWorldInv(UUID playersUID, UUID worldUID) {
-    return playerWorldInvTable.get(playersUID, worldUID);
+    MultiInventory playersInv =  playerWorldInvTable.get(playersUID, worldUID);
+    
+    if(playersInv == null) {
+      playersInv = new MultiInventory(new ItemStack[4], new ItemStack[36]);
+      playerWorldInvTable.put(playersUID, worldUID, playersInv);
+    }
+    
+    return playersInv;
   }
 
   @Override

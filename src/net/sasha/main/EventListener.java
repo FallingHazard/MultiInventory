@@ -58,9 +58,6 @@ public class EventListener implements Listener {
         MultiInventory newInvStuff = invManager.getPlayersWorldInv(teleportersUID, 
                                                                    newWorldUID);
        
-        teleporterInv.clear();
-        teleporterInv.setArmorContents(new ItemStack[4]);
-        
         if(newInvStuff != null) {
           teleporterInv.setContents(newInvStuff.getContent());
           teleporterInv.setArmorContents(newInvStuff.getArmor());
