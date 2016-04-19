@@ -25,7 +25,7 @@ public class PlayerInvFile {
       }
   }
 
-  public FileConfiguration getConfig() {
-    return playerConfig;
+  public SyncConfigWrapper getConfig() {
+    return syncConfig;
   }
 }

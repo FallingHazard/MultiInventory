@@ -1,3 +1,13 @@
+package net.sasha.file;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.bukkit.configuration.file.FileConfiguration;
+
 public class SyncConfigWrapper {
   private final FileConfiguration fileConfig;
 
@@ -5,6 +15,7 @@ public class SyncConfigWrapper {
     fileConfig = config;
   }
 
+  @SuppressWarnings("unchecked")
   public synchronized <T> List<T> getList(String path) {
     return (List<T>) fileConfig.getList(path);
   }

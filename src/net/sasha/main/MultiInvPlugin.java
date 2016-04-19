@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.sasha.file.MultiInvFileSystem;
 import net.sasha.file.PlayerInvFile;
+import net.sasha.file.SyncConfigWrapper;
 
 public class MultiInvPlugin extends JavaPlugin{
   private InventoryManager invManager;
@@ -54,14 +55,14 @@ public class MultiInvPlugin extends JavaPlugin{
     for(Entry<UUID, PlayerInvFile> playerInvEntry : playerInvData.entrySet()) {
       UUID playerUUID = playerInvEntry.getKey();
 
-      FileConfiguration playerInvConfig = playerInvEntry.getValue().getConfig();
+      SyncConfigWrapper playerInvConfig = playerInvEntry.getValue().getConfig();
 
       for(String key
-          : playerInvConfig.getConfigurationSection("")) {
+          : playerInvConfig.getConfigSectionKeys("")) {
         UUID worldUID = UUID.fromString(key);
 
-        List<ItemStack> invContent = (List<ItemStack>) playerInvConfig.getList(key+".contents");
-        List<ItemStack> armorContent = (List<ItemStack>) playerInvConfig.getList(key+".armor");
+        List<ItemStack> invContent = playerInvConfig.getList(key+".contents");
+        List<ItemStack> armorContent = playerInvConfig.getList(key+".armor");
 
         ItemStack[] invArray = invContent.toArray(new ItemStack[invContent.size()]);
         ItemStack[] armorArray = armorContent.toArray(new ItemStack[armorContent.size()]);

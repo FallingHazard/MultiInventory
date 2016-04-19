@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -12,6 +13,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
 import net.sasha.file.MultiInvFileSystem;
+import net.sasha.file.SyncConfigWrapper;
 
 public class InventoryManager extends BukkitRunnable{
   private final Table<UUID, UUID, MultiInventory> playerWorldInvTable;
@@ -56,7 +58,7 @@ public class InventoryManager extends BukkitRunnable{
         : playerWorldInvTable.rowMap().entrySet()) {
       
       UUID playerUUID = playerWorldInvEntry.getKey();
-      FileConfiguration playerConfig = fileSystem.getPlayerFileConfig(playerUUID);
+      SyncConfigWrapper playerConfig = fileSystem.getPlayerFileConfig(playerUUID);
       
       Map<UUID, MultiInventory> worldInvMap = playerWorldInvEntry.getValue();
       
