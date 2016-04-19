@@ -13,19 +13,19 @@ public class PlayerInvFile {
   public PlayerInvFile(File someFile) {
     playerFile = someFile;
 
-    FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(someFile);
-    syncConfig = new SyncConfigWrapper(playerConfig);
+    FileConfiguration config = YamlConfiguration.loadConfiguration(someFile);
+    syncConfig = new SyncConfigWrapper(config);
   }
 
   public void saveFile() {
-    try {
-      syncConfig.save(playerFile);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+      try {
+        syncConfig.save(playerFile);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
   }
 
   public FileConfiguration getConfig() {
-    return syncConfig;
+    return playerConfig;
   }
 }
