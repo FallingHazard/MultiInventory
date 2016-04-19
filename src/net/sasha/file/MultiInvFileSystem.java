@@ -94,7 +94,7 @@ public class MultiInvFileSystem {
     }
   }
   
-  public FileConfiguration getPlayerFileConfig(UUID playerUID) {
+  public SyncConfigWrapper getPlayerFileConfig(UUID playerUID) {
    PlayerInvFile playerInvFile =  playerFileConfigMap.get(playerUID);
    
    if (playerInvFile == null) {

@@ -8,24 +8,24 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class PlayerInvFile {
   private final File playerFile;
-  private final FileConfiguration playerConfig;
-  
+  private final SyncConfigWrapper syncConfig;
+
   public PlayerInvFile(File someFile) {
     playerFile = someFile;
-    playerConfig = YamlConfiguration.loadConfiguration(someFile);
+
+    FileConfiguration config = YamlConfiguration.loadConfiguration(someFile);
+    syncConfig = new SyncConfigWrapper(config);
   }
-  
+
   public void saveFile() {
-    synchronized (playerConfig) {
       try {
-        playerConfig.save(playerFile);
+        syncConfig.save(playerFile);
       } catch (IOException e) {
         e.printStackTrace();
       }
-    }
   }
-    
-  public FileConfiguration getConfig() {
-    return playerConfig;
+
+  public SyncConfigWrapper getConfig() {
+    return syncConfig;
   }
 }
