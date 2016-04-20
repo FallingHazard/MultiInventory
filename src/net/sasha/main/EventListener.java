@@ -30,7 +30,7 @@ public class EventListener implements Listener {
     UUID worldUID = quitter.getLocation().getWorld().getUID();
     UUID playerUID = quitter.getUniqueId();
     
-    invManager.savePlayersWorldInv(playerUID, worldUID, quitter.getInventory());
+    invManager.setPlayersWorldInv(playerUID, worldUID, quitter.getInventory());
   }
   
   /* 
@@ -52,16 +52,14 @@ public class EventListener implements Listener {
         UUID teleportersUID = teleporter.getUniqueId();
         PlayerInventory teleporterInv = teleporter.getInventory();
         
-        invManager.savePlayersWorldInv(teleportersUID, 
-                                       prevWorldUID, teleporterInv);
+        invManager.setPlayersWorldInv(teleportersUID, 
+                                      prevWorldUID, teleporterInv);
         
         MultiInventory newInvStuff = invManager.getPlayersWorldInv(teleportersUID, 
                                                                    newWorldUID);
        
-        if(newInvStuff != null) {
-          teleporterInv.setContents(newInvStuff.getContent());
-          teleporterInv.setArmorContents(newInvStuff.getArmor());
-        }
+        teleporterInv.setContents(newInvStuff.getContent());
+        teleporterInv.setArmorContents(newInvStuff.getArmor());
       }
     }
   }
@@ -74,7 +72,7 @@ public class EventListener implements Listener {
     UUID dierUID = dier.getUniqueId();
     
     InventoryManager invManager = plugin.getInvManager();
-    invManager.savePlayersWorldInv(dierUID, worldUID, 
+    invManager.setPlayersWorldInv(dierUID, worldUID, 
                                    new MultiInventory(new ItemStack[4], 
                                                       new ItemStack[36])); 
   }

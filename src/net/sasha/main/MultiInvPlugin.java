@@ -34,7 +34,7 @@ public class MultiInvPlugin extends JavaPlugin{
     getServer().getPluginManager().registerEvents(new EventListener(this), this);
 
     /* Short time for testing ! */
-    invManager.runTaskTimer(this, 0L, 36000L);
+    invManager.runTaskTimer(this, 0L, 10L);
     super.onEnable();
   }
 
@@ -65,7 +65,7 @@ public class MultiInvPlugin extends JavaPlugin{
         ItemStack[] invArray = invContent.toArray(new ItemStack[invContent.size()]);
         ItemStack[] armorArray = armorContent.toArray(new ItemStack[armorContent.size()]);
 
-        invManager.savePlayersWorldInv(playerUUID,
+        invManager.setPlayersWorldInv(playerUUID,
                                        worldUID,
                                        new MultiInventory(armorArray, invArray));
       }

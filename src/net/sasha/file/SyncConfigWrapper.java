@@ -9,9 +9,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class SyncConfigWrapper {
   private final FileConfiguration fileConfig;
+  
+  private long lastModified;
+  private long lastSaved;
 
   public SyncConfigWrapper(FileConfiguration config) {
     fileConfig = config;
+    
+    lastModified = System.currentTimeMillis();
+    lastSaved = 0;
   }
 
   @SuppressWarnings("unchecked")
@@ -28,10 +34,17 @@ public class SyncConfigWrapper {
 
   public synchronized void set(String path, Object value) {
     fileConfig.set(path, value);
+    lastModified = System.currentTimeMillis();
   }
 
   public synchronized void save(File fileToSave) throws IOException {
-    fileConfig.save(fileToSave);
+    if(modifiedSinceLastSave()) {
+      fileConfig.save(fileToSave);
+      lastSaved = System.currentTimeMillis();
+    }
   }
-
+  
+  private boolean modifiedSinceLastSave() {
+    return lastModified - lastSaved > 0;
+  }
 }
