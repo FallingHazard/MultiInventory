@@ -39,7 +39,6 @@ public class MultiInvFileSystem {
     }
     
     try {
-      
       coreData = new File(pluginFolder.getAbsolutePath()+File.separator+"CoreData.yml");
       
       if(!coreData.exists())

@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.sasha.file.MultiInvFileSystem;
@@ -35,7 +34,7 @@ public class MultiInvPlugin extends JavaPlugin{
     getServer().getPluginManager().registerEvents(new EventListener(this), this);
 
     /* Short time for testing ! */
-    invManager.runTaskTimer(this, 0L, 36000L);
+    invManager.runTaskTimer(this, 0L, 10L);
     super.onEnable();
   }
 
@@ -48,7 +47,6 @@ public class MultiInvPlugin extends JavaPlugin{
   }
 
   /* In this version ALL files are loaded into memory */
-  @SuppressWarnings("unchecked")
   private void loadPlayerInventories() {
     Map<UUID, PlayerInvFile> playerInvData = fileSystem.getPlayerData();
 
@@ -67,7 +65,7 @@ public class MultiInvPlugin extends JavaPlugin{
         ItemStack[] invArray = invContent.toArray(new ItemStack[invContent.size()]);
         ItemStack[] armorArray = armorContent.toArray(new ItemStack[armorContent.size()]);
 
-        invManager.savePlayersWorldInv(playerUUID,
+        invManager.setPlayersWorldInv(playerUUID,
                                        worldUID,
                                        new MultiInventory(armorArray, invArray));
       }
