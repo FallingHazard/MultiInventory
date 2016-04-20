@@ -34,7 +34,7 @@ public class MultiInvPlugin extends JavaPlugin{
     getServer().getPluginManager().registerEvents(new EventListener(this), this);
 
     /* Short time for testing ! */
-    invManager.runTaskTimer(this, 0L, 10L);
+    invManager.runTaskTimer(this, 0L, 36000L);
     super.onEnable();
   }
 

@@ -1,5 +1,6 @@
 package net.sasha.main;
 
+import java.lang.instrument.Instrumentation;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -48,14 +49,13 @@ public class InventoryManager extends BukkitRunnable{
     return playersInv;
   }
 
-  @Override
   public void run() {
     saveInventories();
   }
 
   @SuppressWarnings("deprecation")
   private void saveInventories() {
-    MultiInvFileSystem fileSystem = plugin.getFileSystem();
+    final MultiInvFileSystem fileSystem = plugin.getFileSystem();
     
     for(Entry<UUID, Map<UUID, MultiInventory>> playerWorldInvEntry 
         : playerWorldInvTable.rowMap().entrySet()) {
@@ -81,11 +81,10 @@ public class InventoryManager extends BukkitRunnable{
     if(plugin.isEnabled())
       plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin,
                                                                  new Runnable() {
-        @Override
         public void run() {
           fileSystem.saveAllPlayerFiles();
         }
-      }, 5L);
+      }, 100L);
   }
 
   public void saveAllInvsToFile() {
